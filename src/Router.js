@@ -1,37 +1,89 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSelector } from 'react-redux';
+import CustomDrawer from './components/CustomDrawer';
 import Welcome from './screens/Welcome';
 import Login from './screens/Login';
 import Register from './screens/Register';
 import ChooseAuth from './screens/ChooseAuth';
+import Home from './screens/Home';
+import Profile from './screens/Profile';
+import ButtonTab from './components/BottomTab';
 
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
+const Tab = createBottomTabNavigator();
 
+const HomeTabs = () => {
+  return (
+    <Tab.Navigator tabBar={props => <ButtonTab {...props} />}>
+      <Tab.Screen
+        name="home"
+        component={Home}
+        options={{ headerShown: false, tabBarBadge: 3 }}
+      />
+      <Tab.Screen
+        name="person"
+        component={Profile}
+        options={{ headerShown: false, tabBarBadge: 3 }}
+      />
+    </Tab.Navigator>
+  );
+};
+const myDrawer = () => {
+  return (
+    <Drawer.Navigator drawerContent={props => <CustomDrawer {...props} />}>
+      <Drawer.Screen
+        component={HomeTabs}
+        name="Home"
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Drawer.Navigator>
+  );
+};
 const Router = () => {
+  const token = useSelector(state => state.auth.token);
+  // console.log('ini token loh: ', token);
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Welcome"
-          component={Welcome}
-          options={{ headerShown: false, tabBarBadge: 3 }}
-        />
-        <Stack.Screen
-          name="ChooseAuth"
-          component={ChooseAuth}
-          options={{ headerShown: false, tabBarBadge: 3 }}
-        />
-        <Stack.Screen
-          name="Register"
-          component={Register}
-          options={{ headerShown: false, tabBarBadge: 3 }}
-        />
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ headerShown: false, tabBarBadge: 3 }}
-        />
+      <Stack.Navigator initialRouteName="Welcome">
+        {token === null ? (
+          <>
+            <Stack.Screen
+              name="Welcome"
+              component={Welcome}
+              options={{ headerShown: false, tabBarBadge: 3 }}
+            />
+            <Stack.Screen
+              name="ChooseAuth"
+              component={ChooseAuth}
+              options={{ headerShown: false, tabBarBadge: 3 }}
+            />
+            <Stack.Screen
+              name="Register"
+              component={Register}
+              options={{ headerShown: false, tabBarBadge: 3 }}
+            />
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{ headerShown: false, tabBarBadge: 3 }}
+            />
+          </>
+        ) : (
+          <>
+            <Stack.Screen
+              name="myDrawer"
+              component={myDrawer}
+              options={{ headerShown: false, tabBarBadge: 3 }}
+            />
+          </>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

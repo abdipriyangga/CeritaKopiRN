@@ -10,7 +10,7 @@ import {
 
 import { welcomeImage } from '../assets';
 
-const Welcome = props => {
+const Welcome = ({ navigation }) => {
   return (
     <ScrollView vertical={true}>
       <View style={styles.container}>
@@ -19,7 +19,7 @@ const Welcome = props => {
         <View>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => props.navigation.navigate('ChooseAuth')}>
+            onPress={() => navigation.navigate('ChooseAuth')}>
             <Text style={styles.textBtn}>Get Started</Text>
           </TouchableOpacity>
         </View>

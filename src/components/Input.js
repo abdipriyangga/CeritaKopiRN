@@ -6,6 +6,7 @@ const Input = ({
   placeholder,
   onChangeText,
   value,
+  keyboardType,
 }) => {
   return (
     <View>
@@ -15,6 +16,7 @@ const Input = ({
         placeholder={placeholder}
         onChangeText={onChangeText}
         value={value}
+        keyboardType={keyboardType}
         style={styles.input}
       />
     </View>
@@ -29,8 +31,8 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderBottomWidth: 1,
-    borderBottomColor: '#9F9F9F',
+    borderColor: '#9F9F9F',
+    borderWidth: 1,
     borderRadius: 10,
     paddingHorizontal: 10,
     marginVertical: 2,

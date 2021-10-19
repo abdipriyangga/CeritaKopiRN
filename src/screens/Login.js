@@ -5,12 +5,11 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  ToastAndroid,
   ScrollView,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
 import Input from '../components/Input';
-import { Login as loginAction } from '../redux/actions/authAction';
+import { Login as loginAction } from '../redux/actions/auth';
 import { loginImage } from '../assets';
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -36,21 +35,21 @@ const Login = () => {
           <Input
             value={email}
             onChangeText={setEmail}
-            type="email"
+            keyboardType="email-address"
             placeholder="enter your email address"
             variant="underlined"
           />
           <Input
             value={password}
             onChangeText={setPassword}
-            type="password"
             placeholder="enter your password"
             variant="underlined"
             color="#000"
+            secureTextEntry
           />
         </View>
         <TouchableOpacity onPress={onSubmit} style={styles.button}>
-          <Text style={styles.textBtn}> Create Account </Text>
+          <Text style={styles.textBtn}>Login </Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

@@ -11,17 +11,17 @@ import {
 import { useDispatch } from 'react-redux';
 import Input from '../components/Input';
 import { signupImage } from '../assets';
-import { Register as registerAction } from '../redux/actions/authAction';
+import { Register as registerAction } from '../redux/actions/auth';
 
-const Register = navigation => {
+const Register = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phone_number, setPhoneNumber] = useState('');
   const dispatch = useDispatch();
   const form = {
     email,
     password,
-    phoneNumber,
+    phone_number,
   };
   const onSubmit = () => {
     dispatch(registerAction(form, navigation));
@@ -39,22 +39,22 @@ const Register = navigation => {
           <Input
             value={email}
             onChangeText={setEmail}
-            type="email"
+            keyboardType="email-address"
             placeholder="enter your email address"
             variant="underlined"
           />
           <Input
             value={password}
             onChangeText={setPassword}
-            type="password"
             placeholder="enter your password"
             variant="underlined"
             color="#000"
+            secureTextEntry
           />
           <Input
-            value={phoneNumber}
+            value={phone_number}
             onChangeText={setPhoneNumber}
-            type="text"
+            keyboardType="number-pad"
             placeholder="enter your phone number"
             variant="underlined"
           />

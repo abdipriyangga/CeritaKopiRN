@@ -1,7 +1,8 @@
 import http from '../../helpers/http';
-// import { API_URL } from 'react-native-dotenv';
 import FlashMessage from '../../components/FlashMessage';
-const API_URL = 'http://localhost:8080';
+import { ToastAndroid } from 'react-native';
+
+const API_URL = 'http://localhost:8090';
 
 export const Register = (data, navigation) => {
   return async dispatch => {
@@ -12,15 +13,17 @@ export const Register = (data, navigation) => {
     form.append('phone_number', data.phone_number);
     try {
       const { data: newData } = await http().post(
-        `${API_URL}/auth/register`,
+        `${API_URL}/auth/signup`,
         form,
       );
       dispatch({ type: 'SET_REGISTER', payload: false });
       console.log('Ini data  form: ', newData);
+      // FlashMessage('Register Success!', 'success');
+      ToastAndroid.show('Register Success!', ToastAndroid.SHORT);
       navigation.navigate('Login');
-      FlashMessage('Register Success!', 'success');
     } catch (err) {
-      FlashMessage(err.response.data.message);
+      // FlashMessage(err?.response?.newData?.message, 'danger');
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.SHORT);
       dispatch({ type: 'SET_REGISTER', payload: false });
     }
   };
@@ -43,10 +46,19 @@ export const Login = data => {
       dispatch({ type: 'GET_TOKEN', payload: newData.results.token });
       dispatch({ type: 'SET_LOGIN', payload: false });
       console.log(newData);
-      FlashMessage('Login Success', 'success');
+      ToastAndroid.show('Login Success!', ToastAndroid.SHORT);
     } catch (err) {
-      FlashMessage(err.response.data.message);
+      // FlashMessage(err?.response?.data?.message);
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.SHORT);
       dispatch({ type: 'SET_LOGIN', payload: false });
     }
+  };
+};
+
+export const authLogout = () => {
+  return async dispatch => {
+    dispatch({ type: 'SET_AUTH_LOGOUT' });
+    dispatch({ type: 'SET_CLEAR_HISTORY' });
+    dispatch({ type: 'CLEAR_CHAT' });
   };
 };
