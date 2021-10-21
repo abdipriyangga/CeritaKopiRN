@@ -51,8 +51,8 @@ const Home = props => {
           <View style={styles.wrapCategory}>
             {dataCategory.map(dc => {
               return (
-                <TouchableOpacity onPress={() => getProductCategory(dc.id)}>
-                  <Text style={styles.subText}> {dc.name} </Text>
+                <TouchableOpacity onPress={() => props.getProductCategory(dc?.id)}>
+                  <Text style={{ fontSize: 20, color: dc?.name ? '#6A4029' : '#9A9A9D', fontWeight: 'bold' }}> {dc?.name} </Text>
                 </TouchableOpacity>
               );
             })}
@@ -60,7 +60,7 @@ const Home = props => {
         </ScrollView>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.wrapItems}>
-            {data.map(items => {
+            {props.category.productCategory < 1 ? data.map(items => {
               return (
                 <CardItem
                   key={items.id}
@@ -71,8 +71,26 @@ const Home = props => {
                       ? CoffeeImage
                       : { uri: `${URL}${items.images}` }
                   }
+                  onPress={() => props.navigation.navigate('ProductDetail', items.id)}
                 />
               );
+            }) : productCategory.map((prod) => {
+
+              if (props.category.productCategory === 0) {
+                return (
+                  <>
+                    <Text>sdlfadl</Text>
+                  </>
+                );
+              } else {
+                return (
+                  <CardItem key={prod.id} name={prod.name} price={prod.price} img={
+                    prod.images === null || undefined
+                      ? CoffeeImage
+                      : { uri: `${URL}${prod.images}` }
+                  } onPress={() => props.navigation.navigate('ProductDetail', prod.id)} />
+                );
+              }
             })
             }
           </View>
@@ -103,9 +121,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   wrapText: {
-    top: 20,
+    top: 10,
     width: '80%',
-    marginHorizontal: 15,
+    marginHorizontal: '5%',
   },
   textHead: {
     fontFamily: 'Poppins-Bold',

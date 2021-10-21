@@ -11,6 +11,7 @@ import Register from './screens/Register';
 import ChooseAuth from './screens/ChooseAuth';
 import Home from './screens/Home';
 import Profile from './screens/Profile';
+import ProductDetail from './screens/ProductDetail';
 import ButtonTab from './components/BottomTab';
 
 const Stack = createStackNavigator();
@@ -84,6 +85,11 @@ const Router = () => {
             />
           </>
         )}
+        <Stack.Screen
+          name="ProductDetail"
+          component={ProductDetail}
+          options={{ headerShown: false, tabBarBadge: 3 }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
