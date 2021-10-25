@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,11 +11,49 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { CoffeeImage } from '../assets';
 import ButtonSize from '../components/ButtonSize';
-const ProductDetail = ({ navigation, route }) => {
+import { getDetailProducts } from '../redux/actions/items';
+import { connect } from 'react-redux';
+import { addProducts } from '../redux/actions/cart';
+const ProductDetail = props => {
+  const { id } = props.route.params;
+  const { detail } = props.items;
+  const [price, setPrice] = useState(0);
+  const [selectedVariant, setSelectedVariant] = useState(0);
+  const [variant, setVariant] = useState(null);
+  const { token } = props.auth;
+  useEffect(() => {
+    if (detail?.variants) {
+      console.log('changing');
+      const data = detail?.variants.map(variant => {
+        return { ...variant, amount: 0 };
+      });
+      setVariant(data);
+      console.log('data', data);
+    }
+  }, [detail.variants]);
+
+  useEffect(() => {
+    if (detail?.base_price) {
+      setPrice(detail?.base_price);
+    }
+  }, [detail]);
+  console.log(`product dettail ${id}:`, detail);
+  useEffect(() => {
+    props.getDetailProducts(id);
+    return () => {
+      setVariant(null);
+    };
+  }, []);
+
+  const getPrice = idx => {
+    const getPrice = detail.variants[idx].price;
+    setPrice(getPrice);
+    setSelectedVariant(getPrice);
+  };
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => props.navigation.goBack()}>
           <Icon name="chevron-back-outline" size={30} color="white" />
         </TouchableOpacity>
         <TouchableOpacity>
@@ -22,37 +61,43 @@ const ProductDetail = ({ navigation, route }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.priceContainer}>
-        <Text style={styles.textHead}>30.000</Text>
+        <Text style={styles.textHead}>{price.toLocaleString('en')}</Text>
       </View>
       <View style={styles.secContainer}>
         <View style={styles.wrapImage}>
-          <Image source={CoffeeImage} borderRadius={100} />
+          <Image
+            style={{ width: '100%', height: '100%' }}
+            source={{ uri: detail.images }}
+            borderRadius={100}
+          />
         </View>
         <View style={styles.wrapText}>
-          <Text style={styles.textHeadSec}>Cold Brew</Text>
+          <Text style={styles.textHeadSec}>{detail?.name}</Text>
         </View>
         <View style={styles.wrapTextDeliv}>
-          <Text style={styles.textSubHead}>
-            Delivery only on Monday to friday at 1 - 7 pm
-          </Text>
+          <Text style={styles.textSubHead}>{detail.delivery_on}</Text>
         </View>
         <View style={styles.wrapTextDesc}>
-          <Text style={styles.textDesc}>
-            Cold brewing is a method of brewing that combines ground coffee and
-            cool water and uses time instead of heat to extract the flavor. It
-            is brewed in small batches and steeped for as long as 48 hours.
-          </Text>
+          <Text style={styles.textDesc}>{detail.detail}</Text>
         </View>
         <View style={styles.wrapChooseSize}>
           <Text style={styles.textHeadChoose}>Choose a size</Text>
-          <View style={styles.row}>
-            <ButtonSize name="L" />
-            <ButtonSize name="L" />
-            <ButtonSize name="L" />
+          <View style={styles.rowVariant}>
+            {detail?.variants?.map((variant, idx) => {
+              return (
+                <ButtonSize
+                  key={variant.id}
+                  name={variant.code}
+                  onPress={() => getPrice(idx)}
+                />
+              );
+            })}
           </View>
         </View>
-        <View>
-          <TouchableOpacity style={styles.button}>
+        <View style={styles.wrapButton}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => props.addProducts(variant)}>
             <Text style={styles.textBtn}>Add to Cart</Text>
           </TouchableOpacity>
         </View>
@@ -60,8 +105,15 @@ const ProductDetail = ({ navigation, route }) => {
     </View>
   );
 };
-
-export default ProductDetail;
+const mapStateToProps = state => ({
+  items: state.items,
+  auth: state.auth,
+});
+const mapDispatchToProps = {
+  getDetailProducts,
+  addProducts,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ProductDetail);
 const styles = StyleSheet.create({
   container: {
     padding: 10,
@@ -73,12 +125,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 20,
   },
+  rowVariant: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
   priceContainer: {
     backgroundColor: '#FFBA33',
     width: '30%',
     padding: 20,
     borderRadius: 15,
-    marginTop: 130,
+    marginTop: 100,
     marginLeft: 10,
   },
   secContainer: {
@@ -146,6 +203,8 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginLeft: 150,
     marginTop: -120,
+    width: '50%',
+    height: '23%',
   },
   button: {
     marginLeft: 0,
@@ -155,7 +214,6 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 57,
   },
   textBtn: {
     fontFamily: 'Poppins-Bold',
@@ -204,5 +262,9 @@ const styles = StyleSheet.create({
     marginTop: 40,
     flex: 1,
     flexDirection: 'row',
+  },
+  wrapButton: {
+    flex: 0.47,
+    justifyContent: 'flex-end',
   },
 });

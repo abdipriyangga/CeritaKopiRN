@@ -1,5 +1,6 @@
 import http from '../../helpers/http';
 // const { REACT_APP_URL: URL } = process.env;
+// import { URL } from '@env';
 
 const URL = 'http://localhost:8090';
 
@@ -7,10 +8,11 @@ const getProducts = url => {
   if (!url) {
     return async dispatch => {
       const { data } = await http().get(`${URL}/items`);
+      console.log('data: ', data);
       dispatch({
         type: 'SET_GET_PRODUCTS',
         payload: {
-          products: data.results,
+          items: data.results,
           pageInfo: data.pageInfo,
         },
       });
@@ -22,7 +24,7 @@ const getProducts = url => {
       dispatch({
         type: 'SET_NEXT_PRODUCTS',
         payload: {
-          products: data.results,
+          items: data.results,
           pageInfo: data.pageInfo,
         },
       });
@@ -33,6 +35,7 @@ const getProducts = url => {
 const getDetailProducts = id => {
   return async dispatch => {
     const { data } = await http().get(`${URL}/items/${id}`);
+    console.log('data dettail: ', data);
     dispatch({
       type: 'SET_GET_DETAILS',
       payload: data.results,

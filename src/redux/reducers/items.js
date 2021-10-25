@@ -9,13 +9,13 @@ const items = (state = initialState, action) => {
     case 'SET_GET_PRODUCTS':
       return {
         ...state,
-        data: action.payload.products,
+        data: action.payload.items,
         pageInfo: action.payload.pageInfo,
       };
     case 'SET_NEXT_PRODUCTS':
       return {
         ...state,
-        data: [...state.data, ...action.payload.products],
+        data: [...state.data, ...action.payload.items],
         pageInfo: action.payload.pageInfo,
       };
     case 'SET_GET_DETAILS':

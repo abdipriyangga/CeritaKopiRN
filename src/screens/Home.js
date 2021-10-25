@@ -71,7 +71,7 @@ const Home = props => {
                       ? CoffeeImage
                       : { uri: `${URL}${items.images}` }
                   }
-                  onPress={() => props.navigation.navigate('ProductDetail', items.id)}
+                  onPress={() => props.navigation.navigate('ProductDetail', { id: items.id })}
                 />
               );
             }) : productCategory.map((prod) => {
@@ -88,7 +88,7 @@ const Home = props => {
                     prod.images === null || undefined
                       ? CoffeeImage
                       : { uri: `${URL}${prod.images}` }
-                  } onPress={() => props.navigation.navigate('ProductDetail', prod.id)} />
+                  } onPress={() => props.navigation.navigate('ProductDetail', { id: prod.id })} />
                 );
               }
             })
