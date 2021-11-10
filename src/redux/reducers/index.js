@@ -5,6 +5,7 @@ import profile from './profile';
 import history from './history';
 import items from './items';
 import category from './category';
+import cart from './cart';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const persistAuth = {
@@ -17,6 +18,7 @@ const reducers = combineReducers({
   history,
   items,
   category,
+  cart,
 });
 
 export default reducers;

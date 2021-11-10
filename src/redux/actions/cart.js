@@ -11,4 +11,10 @@ const addProducts = data => {
   };
 };
 
+export const updateProducts = data => {
+  return {
+    type: 'SET_UPDATE_PRODUCTS',
+    payload: data,
+  };
+};
 export { addProducts };

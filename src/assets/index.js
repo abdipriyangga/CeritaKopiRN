@@ -4,6 +4,7 @@ import signupImage from './images/signupImage.png';
 import chooseAuthImage from './images/chooseAuthImage.png';
 import defaultUser from './images/defaultUser.png';
 import CoffeeImage from './images/kopiLatte.png';
+import EmptyCart from './empty-cart.png';
 export {
   welcomeImage,
   loginImage,
@@ -11,4 +12,5 @@ export {
   chooseAuthImage,
   defaultUser,
   CoffeeImage,
+  EmptyCart,
 };

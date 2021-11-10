@@ -14,6 +14,7 @@ import Profile from './screens/Profile';
 import ProductDetail from './screens/ProductDetail';
 import ButtonTab from './components/BottomTab';
 import Cart from './screens/Cart';
+import Delivery from './screens/Delivery';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -94,6 +95,11 @@ const Router = () => {
         <Stack.Screen
           name="Cart"
           component={Cart}
+          options={{ headerShown: false, tabBarBadge: 3 }}
+        />
+        <Stack.Screen
+          name="Delivery"
+          component={Delivery}
           options={{ headerShown: false, tabBarBadge: 3 }}
         />
       </Stack.Navigator>

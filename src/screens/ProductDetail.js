@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import {
@@ -25,10 +26,10 @@ const ProductDetail = props => {
     if (detail?.variants) {
       console.log('changing');
       const data = detail?.variants.map(variant => {
-        return { ...variant, amount: 0 };
+        return { ...variant, amount: 1 };
       });
       setVariant(data);
-      console.log('data', data);
+      console.log('data WOY:', data);
     }
   }, [detail.variants]);
 
@@ -46,7 +47,7 @@ const ProductDetail = props => {
   }, []);
 
   const getPrice = idx => {
-    const getPrice = detail.variants[idx].price;
+    const getPrice = detail?.variants[idx].price;
     setPrice(getPrice);
     setSelectedVariant(getPrice);
   };

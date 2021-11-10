@@ -10,6 +10,12 @@ const cart = (state = initialState, action) => {
         items: [...state.items, ...action.payload],
       };
     }
+    case 'SET_UPDATE_PRODUCTS': {
+      return {
+        ...state,
+        products: action.payload,
+      };
+    }
     default: {
       return {
         ...state,

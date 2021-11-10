@@ -1,4 +1,6 @@
-import React from 'react';
+/* eslint-disable no-shadow */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,7 +12,57 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import CardCart from '../components/CardCart';
 import Counter from '../components/Counter';
+import { connect } from 'react-redux';
+import { getProfile } from '../redux/actions/profile';
+import { CoffeeImage, EmptyCart } from '../assets';
+import { getDetailProducts } from '../redux/actions/items';
+import CounterItem from '../components/CounterItem';
+import { updateProducts } from '../redux/actions/cart';
+import { useDispatch } from 'react-redux';
 const Cart = props => {
+  const dispatch = useDispatch();
+  const { users } = props.profile;
+  const { items } = props.cart;
+  const { detail } = props.items;
+  useEffect(() => {
+    props.getProfile(props.auth.token);
+    console.log('item dr cart useEfect: ', items);
+  }, []);
+  const [finalData, setFinalData] = useState();
+  const [variant, setVariant] = useState(null);
+  useEffect(() => {
+    if (items) {
+      console.log('changing');
+      const data = items.map(variant => {
+        return { ...variant, amount: 1 };
+      });
+      setVariant(data);
+      console.log('data =================================', data);
+    }
+  }, []);
+  const price = items.map(data => parseInt(data.price) * parseInt(data.amount));
+  const totalItem = price.reduce(
+    (acc, curr) => parseInt(acc) + parseInt(curr),
+    0,
+  );
+  const tax = totalItem * (10 / 100);
+  const shippingFee = 10000;
+  const finalPrice = totalItem + tax + shippingFee;
+  console.log('====================================');
+  console.log('item dr cart: ', items);
+  console.log('totalItem: ', totalItem);
+  console.log('detail: ', detail);
+  // console.log("data: ", data)
+  console.log('====================================');
+  const onCheckout = () => {
+    props.navigation.navigate('Delivery', {
+      amount: items,
+      itemTotal: totalItem,
+      deliveryCharge: shippingFee,
+      tax: tax,
+      totalPrice: finalPrice,
+    });
+  };
   return (
     <ScrollView vertical={true}>
       <View style={styles.row}>
@@ -22,48 +74,88 @@ const Cart = props => {
         </View>
       </View>
       <View style={styles.container}>
-        <View style={styles.row}>
-          <CardCart />
-          <View style={styles.wrapTextDeliv}>
-            <Text style={styles.textHead}>Name Items</Text>
-            <Counter stateValue={0} />
+        {items.length !== 0 ? (
+          items.map(itemCart => {
+            return (
+              <>
+                <View style={styles.row}>
+                  <CardCart
+                    img={
+                      itemCart.images === null || undefined
+                        ? CoffeeImage
+                        : { uri: `${itemCart.images}` }
+                    }
+                    price={itemCart.price}
+                  />
+                  <View style={styles.wrapTextDeliv}>
+                    <Text style={styles.textHead}>{itemCart.item_name}</Text>
+                    <Counter stateValue={1} />
+                    {/* <CounterItem
+                  variant={variant || []}
+                  stateValue={1}
+                  max={detail?.quantity}
+                /> */}
+                  </View>
+                </View>
+              </>
+            );
+          })
+        ) : (
+          <View style={styles.wrapImageCart}>
+            <Image width={30} height={30} source={EmptyCart} />
           </View>
-        </View>
-        <View>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.textBtn}>Apply Coupon Delivery</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.line} />
-        <View>
-          <View style={styles.row}>
-            <Text style={styles.subText}>Item Total</Text>
-            <Text style={styles.textHeadSec}>IDR 1500000</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.subText}>Delivery Charge</Text>
-            <Text style={styles.textHeadSec}>IDR 1500000</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.subText}>Tax</Text>
-            <Text style={styles.textHeadSec}>IDR 1500000</Text>
-          </View>
-          <View style={styles.rowVariant}>
-            <Text style={styles.textHeadChoose}>Total</Text>
-            <Text style={styles.textHeadChoose}>IDR 1500000</Text>
-          </View>
-        </View>
-        <View>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.textBtn}> CHECKOUT</Text>
-          </TouchableOpacity>
-        </View>
+        )}
+        {items.length !== 0 ? (
+          <>
+            <View>
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.textBtn}>Apply Coupon Delivery</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.line} />
+            <View>
+              <View style={styles.row}>
+                <Text style={styles.subText}>Item Total</Text>
+                <Text style={styles.textHeadSec}>IDR {totalItem}</Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.subText}>Delivery Charge</Text>
+                <Text style={styles.textHeadSec}>IDR {shippingFee}</Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.subText}>Tax</Text>
+                <Text style={styles.textHeadSec}>IDR {tax}</Text>
+              </View>
+              <View style={styles.rowVariant}>
+                <Text style={styles.textHeadChoose}>Total</Text>
+                <Text style={styles.textHeadChoose}>IDR {finalPrice}</Text>
+              </View>
+            </View>
+            <View>
+              <TouchableOpacity style={styles.button} onPress={onCheckout}>
+                <Text style={styles.textBtn}> CHECKOUT</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        ) : (
+          <View />
+        )}
       </View>
     </ScrollView>
   );
 };
+const mapStateToProps = state => ({
+  auth: state.auth,
+  profile: state.profile,
+  cart: state.cart,
+  items: state.items,
+});
+const mapDispatchToProps = {
+  getProfile,
+  getDetailProducts,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);
 
-export default Cart;
 const styles = StyleSheet.create({
   container: {
     padding: 25,
@@ -158,6 +250,11 @@ const styles = StyleSheet.create({
     marginTop: -120,
     width: '50%',
     height: '23%',
+  },
+  wrapImageCart: {
+    borderRadius: 50,
+    marginLeft: -250,
+    marginTop: 0,
   },
   button: {
     width: '100%',
