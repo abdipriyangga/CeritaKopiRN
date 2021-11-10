@@ -1,87 +1,69 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import CardCart from '../components/CardCart';
-import Counter from '../components/Counter';
-const Cart = props => {
+/* eslint-disable prettier/prettier */
+import React, { useState } from 'react';
+import { ToastAndroid } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+const Counter = ({ stateValue, max, counterPlus, counterMinus }) => {
+  const [counter, setCounter] = useState(stateValue);
+  const onCount = type => {
+    let result = counter;
+    if (type === 'plus') {
+      if (counter === max) {
+        ToastAndroid.show(
+          `There are only have ${max} of items`,
+          ToastAndroid.SHORT,
+        );
+      } else {
+        counterPlus();
+        result = counter + 1;
+      }
+    }
+    if (type === 'minus') {
+      if (counter <= 0) {
+        ToastAndroid.show('Minimum 0 of items', ToastAndroid.SHORT);
+      } else {
+        counterMinus();
+        result = counter - 1;
+      }
+    }
+    setCounter(result);
+  };
   return (
-    <ScrollView vertical={true}>
+    <View style={styles.container}>
       <View style={styles.row}>
-        <TouchableOpacity onPress={() => props.navigation.goBack()}>
-          <Icon name="chevron-back-outline" size={30} color="black" />
+        <TouchableOpacity
+          onPress={() => onCount('minus')}
+          style={styles.button}>
+          <Text>-</Text>
         </TouchableOpacity>
         <View style={styles.wrapText}>
-          <Text style={styles.textHead}> My Cart</Text>
+          <Text style={styles.textSubHead}>{counter}</Text>
         </View>
+        <TouchableOpacity onPress={() => onCount('plus')} style={styles.button}>
+          <Text>+</Text>
+        </TouchableOpacity>
       </View>
-      <View style={styles.container}>
-        <View style={styles.row}>
-          <CardCart />
-          <View style={styles.wrapTextDeliv}>
-            <Text style={styles.textHead}>Name Items</Text>
-            <Counter stateValue={0} />
-          </View>
-        </View>
-        <View>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.textBtn}>Apply Coupon Delivery</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.line} />
-        <View>
-          <View style={styles.row}>
-            <Text style={styles.subText}>Item Total</Text>
-            <Text style={styles.textHeadSec}>IDR 1500000</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.subText}>Delivery Charge</Text>
-            <Text style={styles.textHeadSec}>IDR 1500000</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.subText}>Tax</Text>
-            <Text style={styles.textHeadSec}>IDR 1500000</Text>
-          </View>
-          <View style={styles.rowVariant}>
-            <Text style={styles.textHeadChoose}>Total</Text>
-            <Text style={styles.textHeadChoose}>IDR 1500000</Text>
-          </View>
-        </View>
-        <View>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.textBtn}> CHECKOUT</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </ScrollView>
+    </View>
   );
 };
-
-export default Cart;
+Counter.defaultProps = {
+  counterPlus: () => { },
+  counterMinus: () => { },
+};
+export default Counter;
 const styles = StyleSheet.create({
   container: {
-    padding: 25,
+    padding: 10,
+    flex: 1,
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-  },
-  line: {
-    width: '100%',
-    height: 2,
-    backgroundColor: '#dbdbdb',
+    marginTop: 10,
+    padding: 0,
   },
   rowVariant: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 40,
+    justifyContent: 'center',
+    marginTop: 20,
   },
   priceContainer: {
     backgroundColor: '#FFBA33',
@@ -98,9 +80,10 @@ const styles = StyleSheet.create({
     marginTop: -20,
   },
   wrapText: {
-    top: 13,
-    width: '100%',
-    marginHorizontal: 100,
+    top: 5,
+    padding: 0,
+    width: '6%',
+    marginRight: 0,
   },
   wrapTextDeliv: {
     top: 30,
@@ -125,12 +108,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginTop: -10,
-    marginLeft: 12,
   },
   textHeadSec: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 20,
+    fontSize: 26,
     fontWeight: 'bold',
+    marginLeft: 180,
   },
   textSubHead: {
     fontFamily: 'Poppins-Bold',
@@ -148,7 +131,7 @@ const styles = StyleSheet.create({
   },
   textHeadChoose: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
   },
@@ -160,19 +143,20 @@ const styles = StyleSheet.create({
     height: '23%',
   },
   button: {
-    width: '100%',
-    height: 70,
-    marginVertical: '10%',
+    marginLeft: 0,
+    width: '10%',
+    height: 30,
     backgroundColor: '#FFBA33',
-    borderRadius: 13,
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight: 10,
   },
   textBtn: {
     fontFamily: 'Poppins-Bold',
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#000000',
+    color: '#FFFFFF',
   },
   buttonLogin: {
     marginLeft: 10,
@@ -205,7 +189,6 @@ const styles = StyleSheet.create({
   subText: {
     fontSize: 20,
     color: '#9A9A9D',
-    fontWeight: 'bold',
   },
   wrapItems: {
     marginTop: 15,

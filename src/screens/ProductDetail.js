@@ -56,7 +56,7 @@ const ProductDetail = props => {
         <TouchableOpacity onPress={() => props.navigation.goBack()}>
           <Icon name="chevron-back-outline" size={30} color="white" />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => props.navigation.navigate('Cart')}>
           <Icon name="cart-outline" size={30} color="white" />
         </TouchableOpacity>
       </View>
