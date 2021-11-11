@@ -7,7 +7,11 @@ import {
   ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import CardAddress from '../components/CardAddress';
+import CardMethod from '../components/CardMethod';
+import { RadioButton } from 'react-native-paper';
 const Delivery = props => {
+  const [checked, setChecked] = React.useState('first');
   return (
     <ScrollView>
       <View style={styles.row}>
@@ -18,6 +22,71 @@ const Delivery = props => {
           <Text style={styles.textHead}> Checkout</Text>
         </View>
       </View>
+      <View style={styles.wrapTextDeliv}>
+        <Text style={styles.textHeadSec}>Delivery</Text>
+      </View>
+      <View style={styles.rowVariant}>
+        <Text style={styles.textDesc}>Address Detail</Text>
+        <TouchableOpacity>
+          <Text style={styles.textBtn}>change</Text>
+        </TouchableOpacity>
+      </View>
+      <View>
+        <CardAddress
+          address="Km 5 refinery road oppsite re
+            public road, effurun, Jakarta"
+          phone="081211122199"
+        />
+      </View>
+      <View style={styles.rowVariant}>
+        <Text style={styles.textDesc}>Delivery Methods</Text>
+      </View>
+      <View style={styles.container}>
+        <View style={styles.card}>
+          <View>
+            <View style={styles.rowDelivery}>
+              <RadioButton
+                value="first"
+                status={checked === 'first' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('first')}
+                color="#6A4029"
+              />
+              <Text style={styles.textSubHead}>Door Delivery</Text>
+            </View>
+            <View style={styles.line} />
+            <View style={styles.rowDelivery}>
+              <RadioButton
+                value="second"
+                status={checked === 'second' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('second')}
+                color="#6A4029"
+              />
+              <Text style={styles.textSubHead}>Pick up at store</Text>
+            </View>
+            <View style={styles.line} />
+            <View style={styles.rowDelivery}>
+              <RadioButton
+                value="third"
+                status={checked === 'third' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('third')}
+                color="#6A4029"
+              />
+              <Text style={styles.textSubHead}>Dine in</Text>
+            </View>
+          </View>
+        </View>
+      </View>
+      <View style={styles.wrapTextDesc}>
+        <View style={styles.row}>
+          <Text style={styles.subText}>Total</Text>
+          <Text style={styles.subTotal}>IDR 120000</Text>
+        </View>
+      </View>
+      <View style={styles.wrapButton}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.textProcess}>Proceed to Payment</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
@@ -25,22 +94,39 @@ const Delivery = props => {
 export default Delivery;
 const styles = StyleSheet.create({
   container: {
-    padding: 25,
+    flex: 1,
+    padding: 10,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 20,
+    marginTop: 17,
+  },
+  card: {
+    width: '100%',
+    height: 200,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    flex: 1,
+    justifyContent: 'space-between',
   },
   line: {
-    width: '100%',
+    width: '65%',
     height: 2,
     backgroundColor: '#dbdbdb',
+    marginHorizontal: 65,
   },
   rowVariant: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 40,
+    marginTop: 10,
+    paddingHorizontal: 20,
+  },
+  rowDelivery: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginTop: 20,
+    paddingHorizontal: 30,
   },
   priceContainer: {
     backgroundColor: '#FFBA33',
@@ -62,17 +148,16 @@ const styles = StyleSheet.create({
     marginHorizontal: 100,
   },
   wrapTextDeliv: {
-    top: 30,
-    width: '100%',
-    marginHorizontal: 100,
-    padding: 15,
-  },
-  wrapTextDesc: {
-    top: 30,
+    top: 5,
     width: '100%',
     marginHorizontal: 0,
-    padding: 15,
-    textAlign: 'justify',
+    padding: 20,
+  },
+  wrapTextDesc: {
+    top: 0,
+    width: '100%',
+    marginHorizontal: 0,
+    padding: 20,
   },
   wrapChooseSize: {
     top: 30,
@@ -88,22 +173,24 @@ const styles = StyleSheet.create({
   },
   textHeadSec: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 20,
+    fontSize: 32,
     fontWeight: 'bold',
+    padding: 0,
   },
   textSubHead: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 14,
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontWeight: '800',
     textAlign: 'left',
-    color: '#6A4029',
+    color: '#000',
+    marginTop: 5,
   },
   textDesc: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'justify',
-    color: '#6A4029',
+    color: '#000',
   },
   textHeadChoose: {
     fontFamily: 'Poppins-Bold',
@@ -122,16 +209,22 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 70,
     marginVertical: '10%',
-    backgroundColor: '#FFBA33',
+    backgroundColor: '#6A4029',
     borderRadius: 13,
     justifyContent: 'center',
     alignItems: 'center',
   },
   textBtn: {
     fontFamily: 'Poppins-Bold',
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#6A4029',
+  },
+  textProcess: {
+    fontFamily: 'Poppins-Bold',
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#000000',
+    color: '#FFF',
   },
   buttonLogin: {
     marginLeft: 10,
@@ -162,8 +255,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   subText: {
-    fontSize: 20,
+    fontSize: 24,
     color: '#9A9A9D',
+    fontWeight: 'bold',
+  },
+  subTotal: {
+    fontSize: 26,
+    color: '#000',
     fontWeight: 'bold',
   },
   wrapItems: {
