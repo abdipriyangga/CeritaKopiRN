@@ -13,7 +13,7 @@ const cart = (state = initialState, action) => {
     case 'SET_UPDATE_PRODUCTS': {
       return {
         ...state,
-        products: action.payload,
+        items: action.payload,
       };
     }
     default: {

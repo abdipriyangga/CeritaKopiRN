@@ -10,8 +10,23 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import CardAddress from '../components/CardAddress';
 import CardMethod from '../components/CardMethod';
 import { RadioButton } from 'react-native-paper';
+import { connect } from 'react-redux';
+import { getProfile } from '../redux/actions/profile';
 const Delivery = props => {
   const [checked, setChecked] = React.useState('first');
+  const { profile } = props.profile;
+  const { amount, itemTotal, tax, totalPrice, deliveryCharge } =
+    props.route.params;
+  const onPayment = () => {
+    props.navigation.navigate('Delivery', {
+      checked: checked,
+      amount: amount,
+      itemTotal: itemTotal,
+      deliveryCharge: deliveryCharge,
+      tax: tax,
+      totalPrice: totalPrice,
+    });
+  };
   return (
     <ScrollView>
       <View style={styles.row}>
@@ -33,9 +48,8 @@ const Delivery = props => {
       </View>
       <View>
         <CardAddress
-          address="Km 5 refinery road oppsite re
-            public road, effurun, Jakarta"
-          phone="081211122199"
+          address={profile[0].address}
+          phone={profile[0].phone_number}
         />
       </View>
       <View style={styles.rowVariant}>
@@ -46,9 +60,9 @@ const Delivery = props => {
           <View>
             <View style={styles.rowDelivery}>
               <RadioButton
-                value="first"
-                status={checked === 'first' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('first')}
+                value="Door delivery"
+                status={checked === 'Door delivery' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Door delivery')}
                 color="#6A4029"
               />
               <Text style={styles.textSubHead}>Door Delivery</Text>
@@ -56,9 +70,11 @@ const Delivery = props => {
             <View style={styles.line} />
             <View style={styles.rowDelivery}>
               <RadioButton
-                value="second"
-                status={checked === 'second' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('second')}
+                value="Pick up at store"
+                status={
+                  checked === 'Pick up at store' ? 'checked' : 'unchecked'
+                }
+                onPress={() => setChecked('Pick up at store')}
                 color="#6A4029"
               />
               <Text style={styles.textSubHead}>Pick up at store</Text>
@@ -66,9 +82,9 @@ const Delivery = props => {
             <View style={styles.line} />
             <View style={styles.rowDelivery}>
               <RadioButton
-                value="third"
-                status={checked === 'third' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('third')}
+                value="Dine in"
+                status={checked === 'Dine in' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Dine in')}
                 color="#6A4029"
               />
               <Text style={styles.textSubHead}>Dine in</Text>
@@ -79,19 +95,29 @@ const Delivery = props => {
       <View style={styles.wrapTextDesc}>
         <View style={styles.row}>
           <Text style={styles.subText}>Total</Text>
-          <Text style={styles.subTotal}>IDR 120000</Text>
+          <Text style={styles.subTotal}>
+            IDR {totalPrice.toLocaleString('en')}
+          </Text>
         </View>
       </View>
       <View style={styles.wrapButton}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={onPayment}>
           <Text style={styles.textProcess}>Proceed to Payment</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
   );
 };
-
-export default Delivery;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  profile: state.profile,
+  cart: state.cart,
+  items: state.items,
+});
+const mapDispatchToProps = {
+  getProfile,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Delivery);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
