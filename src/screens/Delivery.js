@@ -17,8 +17,9 @@ const Delivery = props => {
   const { profile } = props.profile;
   const { amount, itemTotal, tax, totalPrice, deliveryCharge } =
     props.route.params;
+  console.log('data profile: ', profile);
   const onPayment = () => {
-    props.navigation.navigate('Delivery', {
+    props.navigation.navigate('Payment', {
       checked: checked,
       amount: amount,
       itemTotal: itemTotal,
@@ -47,10 +48,7 @@ const Delivery = props => {
         </TouchableOpacity>
       </View>
       <View>
-        <CardAddress
-          address={profile[0].address}
-          phone={profile[0].phone_number}
-        />
+        <CardAddress address={profile.address} phone={profile.phone_number} />
       </View>
       <View style={styles.rowVariant}>
         <Text style={styles.textDesc}>Delivery Methods</Text>
