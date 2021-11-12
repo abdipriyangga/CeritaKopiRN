@@ -18,12 +18,12 @@ const CardPaymentProduct = ({
             <Image source={img ? img : CoffeeImage} style={styles.Image} />
           </View>
           <View>
-            <Text style={styles.textSec}> Hazelnut {itemName} </Text>
-            <Text style={styles.textSec}> x1 {amount} </Text>
-            <Text style={styles.textSec}> Regular {variant} </Text>
+            <Text style={styles.textSec}> {itemName} </Text>
+            <Text style={styles.textSec}> x{amount} </Text>
+            <Text style={styles.textSec}> {variant} </Text>
           </View>
           <View>
-            <Text style={styles.textHead}>IDR 24300 {price}</Text>
+            <Text style={styles.textHead}>IDR {price}</Text>
           </View>
         </View>
       </TouchableOpacity>

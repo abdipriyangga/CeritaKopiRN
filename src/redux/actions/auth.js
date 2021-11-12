@@ -1,8 +1,8 @@
 import http from '../../helpers/http';
 import FlashMessage from '../../components/FlashMessage';
 import { ToastAndroid } from 'react-native';
-
-const API_URL = 'http://localhost:8090';
+import { API_URL } from '@env';
+// const URL = 'http://localhost:8090';
 
 export const Register = (data, navigation) => {
   return async dispatch => {
@@ -12,10 +12,7 @@ export const Register = (data, navigation) => {
     form.append('password', data.password);
     form.append('phone_number', data.phone_number);
     try {
-      const { data: newData } = await http().post(
-        `${API_URL}/auth/signup`,
-        form,
-      );
+      const { data: newData } = await http().post(`${API_URL}/auth/signup`, form);
       dispatch({ type: 'SET_REGISTER', payload: false });
       console.log('Ini data  form: ', newData);
       // FlashMessage('Register Success!', 'success');
@@ -36,12 +33,9 @@ export const Login = data => {
     form.append('email', data.email);
     form.append('password', data.password);
     try {
-      const { data: newData } = await http().post(
-        `${API_URL}/auth/login`,
-        form,
-      );
+      const { data: newData } = await http().post(`${API_URL}/auth/login`, form);
       console.log('====================================');
-      console.log(API_URL);
+      console.log(URL);
       console.log('====================================');
       dispatch({ type: 'GET_TOKEN', payload: newData.results.token });
       dispatch({ type: 'SET_LOGIN', payload: false });

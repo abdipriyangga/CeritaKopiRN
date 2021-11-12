@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,8 +12,19 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import CardPaymentProduct from '../components/CardPaymentProduct';
 import { RadioButton } from 'react-native-paper';
 import { Card, Bank, Cod, MyCard } from '../assets';
+import { connect, useDispatch } from 'react-redux';
+import { getProfile } from '../redux/actions/profile';
+import { createTransaction } from '../redux/actions/transaction';
+import { CoffeeImage } from '../assets';
 const Payment = props => {
   const [checked, setChecked] = React.useState('Card');
+  const { amount, totalPrice } = props.route.params;
+  const { items } = props.cart;
+  const dispatch = useDispatch();
+  const onPay = () => {
+    dispatch(createTransaction(amount, checked, props.auth.token));
+  };
+  console.log(props.auth.token);
   return (
     <ScrollView>
       <View style={styles.row}>
@@ -28,7 +40,23 @@ const Payment = props => {
       </View>
       <View style={styles.container}>
         <View style={styles.card}>
-          <CardPaymentProduct />
+          {items.map(trx => {
+            return (
+              <CardPaymentProduct
+                key={trx.id}
+                itemName={trx.item_name}
+                amount={trx.amount}
+                variant={trx.name}
+                price={totalPrice}
+                img={
+                  trx.images === null || undefined
+                    ? CoffeeImage
+                    : { uri: `${trx.images}` }
+                }
+              />
+            );
+          })}
+          {/* <CardPaymentProduct /> */}
         </View>
       </View>
       <View style={styles.wrapTextDesc}>
@@ -98,15 +126,24 @@ const Payment = props => {
         </View>
       </View>
       <View style={styles.wrapButton}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={onPay}>
           <Text style={styles.textProcess}>Proceed to Payment</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
   );
 };
-
-export default Payment;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  profile: state.profile,
+  cart: state.cart,
+  transaction: state.transaction,
+});
+const mapDispatchToProps = {
+  getProfile,
+  createTransaction,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Payment);
 const styles = StyleSheet.create({
   container: {
     flex: 1,

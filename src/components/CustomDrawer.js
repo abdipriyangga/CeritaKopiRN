@@ -22,14 +22,14 @@ const CustomDrawer = (props) => {
         <Image
           style={styles.pictureDrawer}
           source={
-            profile[0]?.images === null
+            profile.images === null
               ? defaultUser
-              : { uri: profile[0]?.images }
+              : { uri: profile.images }
             // defaultUser
           }
         />
-        <Text style={styles.title}>{profile[0]?.name}</Text>
-        <Text style={[styles.title, styles.subTitle]}>{profile[0]?.email}</Text>
+        <Text style={styles.title}>{profile.name}</Text>
+        <Text style={[styles.title, styles.subTitle]}>{profile.email}</Text>
       </View>
       <ScrollView >
         <View style={styles.wrapperContent}>

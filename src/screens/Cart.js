@@ -48,12 +48,6 @@ const Cart = props => {
   const tax = totalItem * (10 / 100);
   const shippingFee = 10000;
   const finalPrice = totalItem + tax + shippingFee;
-  console.log('====================================');
-  console.log('item dr cart: ', items);
-  console.log('totalItem: ', totalItem);
-  console.log('detail: ', detail);
-  // console.log("data: ", data)
-  console.log('====================================');
   const onCheckout = () => {
     props.navigation.navigate('Delivery', {
       amount: items,

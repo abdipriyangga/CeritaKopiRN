@@ -1,13 +1,12 @@
 import http from '../../helpers/http';
-// const { REACT_APP_URL: URL } = process.env;
-// import { URL } from '@env';
+import { API_URL } from '@env';
 
-const URL = 'http://localhost:8090';
+// const URL = 'http://localhost:8090';
 
 const getProducts = url => {
   if (!url) {
     return async dispatch => {
-      const { data } = await http().get(`${URL}/items`);
+      const { data } = await http().get(`${API_URL}/items`);
       console.log('data: ', data);
       dispatch({
         type: 'SET_GET_PRODUCTS',
@@ -34,7 +33,7 @@ const getProducts = url => {
 
 const getDetailProducts = id => {
   return async dispatch => {
-    const { data } = await http().get(`${URL}/items/${id}`);
+    const { data } = await http().get(`${API_URL}/items/${id}`);
     console.log('data dettail: ', data);
     dispatch({
       type: 'SET_GET_DETAILS',
@@ -45,7 +44,7 @@ const getDetailProducts = id => {
 
 const searchProducts = search => {
   return async dispatch => {
-    const { data } = await http().get(`${URL}/items/search?q=${search}`);
+    const { data } = await http().get(`${API_URL}/items/search?q=${search}`);
     dispatch({
       type: 'SET_GET_PRODUCTS',
       payload: { products: data.results, pageInfo: data.pageInfo },
