@@ -12,7 +12,10 @@ export const Register = (data, navigation) => {
     form.append('password', data.password);
     form.append('phone_number', data.phone_number);
     try {
-      const { data: newData } = await http().post(`${API_URL}/auth/signup`, form);
+      const { data: newData } = await http().post(
+        `${API_URL}/auth/signup`,
+        form,
+      );
       dispatch({ type: 'SET_REGISTER', payload: false });
       console.log('Ini data  form: ', newData);
       // FlashMessage('Register Success!', 'success');
@@ -33,10 +36,10 @@ export const Login = data => {
     form.append('email', data.email);
     form.append('password', data.password);
     try {
-      const { data: newData } = await http().post(`${API_URL}/auth/login`, form);
-      console.log('====================================');
-      console.log(URL);
-      console.log('====================================');
+      const { data: newData } = await http().post(
+        `${API_URL}/auth/login`,
+        form,
+      );
       dispatch({ type: 'GET_TOKEN', payload: newData.results.token });
       dispatch({ type: 'SET_LOGIN', payload: false });
       console.log(newData);

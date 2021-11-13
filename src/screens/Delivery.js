@@ -13,14 +13,13 @@ import { RadioButton } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { getProfile } from '../redux/actions/profile';
 const Delivery = props => {
-  const [checked, setChecked] = React.useState('first');
+  const [checked, setChecked] = React.useState('Door delivery');
   const { profile } = props.profile;
   const { amount, itemTotal, tax, totalPrice, deliveryCharge } =
     props.route.params;
   console.log('data profile: ', profile);
   const onPayment = () => {
     props.navigation.navigate('Payment', {
-      checked: checked,
       amount: amount,
       itemTotal: itemTotal,
       deliveryCharge: deliveryCharge,

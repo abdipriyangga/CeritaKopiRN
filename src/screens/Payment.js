@@ -17,14 +17,16 @@ import { getProfile } from '../redux/actions/profile';
 import { createTransaction } from '../redux/actions/transaction';
 import { CoffeeImage } from '../assets';
 const Payment = props => {
-  const [checked, setChecked] = React.useState('Card');
+  const [checked, setChecked] = React.useState('');
   const { amount, totalPrice } = props.route.params;
   const { items } = props.cart;
   const dispatch = useDispatch();
   const onPay = () => {
-    dispatch(createTransaction(amount, checked, props.auth.token));
+    dispatch(createTransaction(items, checked, props.auth.token));
   };
   console.log(props.auth.token);
+  console.log(items);
+  console.log(checked);
   return (
     <ScrollView>
       <View style={styles.row}>
@@ -122,7 +124,7 @@ const Payment = props => {
       <View style={styles.wrapTextDeliv}>
         <View style={styles.rowTotal}>
           <Text style={styles.subText}>Total</Text>
-          <Text style={styles.subTotal}>IDR 24300</Text>
+          <Text style={styles.subTotal}>IDR {totalPrice}</Text>
         </View>
       </View>
       <View style={styles.wrapButton}>

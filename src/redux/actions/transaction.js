@@ -6,10 +6,10 @@ const createTransaction = (data, payment, token) => {
   console.log('ini transaksi loh!', data);
   return async dispatch => {
     const form = new URLSearchParams();
-    data.forEach(products => {
-      form.append('id_item', products.id);
-      form.append('item_amount', products.amount);
-      form.append('item_variant', products.id_variant);
+    data.forEach(items => {
+      form.append('id_item', items.id);
+      form.append('item_amount', items.amount);
+      form.append('item_variant', items.id_variant);
     });
     form.append('payment_method', payment);
     try {
