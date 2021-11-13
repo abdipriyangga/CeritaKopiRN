@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -7,87 +6,109 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import CardProfile from '../components/CardProfile';
-import { connect } from 'react-redux';
-import { getProfile } from '../redux/actions/profile';
 import { defaultUser } from '../assets';
-const Profile = props => {
-  const { profile } = props.profile;
-  console.log('this isi proile  data: ', profile);
-  useEffect(() => {
-    props.getProfile(props.auth.token);
-  }, []);
+import { RadioButton } from 'react-native-paper';
+import DateField from 'react-native-datefield';
+const EditProfile = props => {
+  const [checked, setChecked] = React.useState('');
   return (
-    <ScrollView>
+    <ScrollView vertical={true}>
       <View style={styles.row}>
         <TouchableOpacity onPress={() => props.navigation.goBack()}>
           <Icon name="chevron-back-outline" size={30} color="black" />
         </TouchableOpacity>
         <View style={styles.wrapText}>
-          <Text style={styles.textHead}> My Profile</Text>
+          <Text style={styles.textHead}> Edit Profile</Text>
         </View>
       </View>
-      <View style={styles.wrapTextDeliv}>
-        <Text style={styles.textHeadSec}>My Profile</Text>
-      </View>
-      <View style={styles.rowVariant}>
-        <Text style={styles.textDesc}>your information</Text>
-        <TouchableOpacity
-          onPress={() => props.navigation.navigate('EditProfile')}>
-          <Text style={styles.textBtn}>edit</Text>
-        </TouchableOpacity>
-      </View>
       <View>
-        <CardProfile
-          name={profile.name}
-          email={profile.email}
-          phone={profile.phone_number}
-          address={profile.address}
-          img={profile.images === null ? defaultUser : { uri: profile.images }}
-        />
+        <View style={styles.wrapImage}>
+          <Image source={defaultUser} style={styles.image} />
+        </View>
+        <View style={styles.wrapButton}>
+          <TouchableOpacity>
+            <Icon name="pencil-outline" size={20} color={'#fff'} />
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.wrapButton}>
+      <View style={styles.container}>
+        <View style={styles.wrapTextDesc}>
+          <Text style={styles.label}>Name:</Text>
+          <View>
+            <TextInput value="Abdi Priyangga" style={styles.formInput} />
+          </View>
+        </View>
+        <View>
+          <View style={styles.rowVariant}>
+            <View style={{ flexDirection: 'row' }}>
+              <RadioButton
+                value="Card"
+                status={checked === 'Card' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Card')}
+                color="#6A4029"
+              />
+              <Text style={styles.textRadio}>Female</Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <RadioButton
+                value="Card"
+                status={checked === 'Card' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Card')}
+                color="#6A4029"
+              />
+              <Text style={styles.textRadio}>Male</Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.wrapTextDesc}>
+          <Text style={styles.label}>Email Address:</Text>
+          <View>
+            <TextInput value="dummy7@gmail.com" style={styles.formInput} />
+          </View>
+        </View>
+        <View style={styles.wrapTextDesc}>
+          <Text style={styles.label}>Phone Number:</Text>
+          <View>
+            <TextInput value="dummy7@gmail.com" style={styles.formInput} />
+          </View>
+        </View>
+        <View style={styles.wrapTextDesc}>
+          <Text style={styles.label}>Date of Birth:</Text>
+          <View>
+            <DateField
+              styleInput={styles.inputBorder}
+              onSubmit={() => console.log()}
+            />
+          </View>
+        </View>
+        <View style={styles.wrapTextDeliv}>
+          <Text style={styles.label}>Delivery Address:</Text>
+          <View>
+            <TextInput value="Jln. Kenangan no: 100" style={styles.formInput} />
+          </View>
+        </View>
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.textProcess}>Order History</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.wrapButton}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.textProcess}>Edit Password</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.wrapButton}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.textProcess}>FAQ</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.wrapButton}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.textProcess}>Help</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.wrapButton}>
-        <TouchableOpacity style={styles.buttonSave}>
-          <Text style={styles.textSave}>Save Change</Text>
+          <Text style={styles.textProcess}>Save and Update</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
   );
 };
-const mapStateToProps = state => ({
-  auth: state.auth,
-  profile: state.profile,
-});
-const mapDispatchToProps = {
-  getProfile,
-};
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+
+export default EditProfile;
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 20,
+    padding: 25,
+    top: -120,
+  },
+  inputBorder: {
+    width: '30%',
+    borderRadius: 8,
+    borderColor: '#cacaca',
+    borderWidth: 1,
   },
   card: {
     width: '100%',
@@ -117,7 +138,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 40,
+    marginVertical: 10,
   },
   rowDelivery: {
     flexDirection: 'row',
@@ -145,16 +167,16 @@ const styles = StyleSheet.create({
     marginHorizontal: 100,
   },
   wrapTextDeliv: {
-    top: 0,
+    top: -25,
     width: '100%',
     marginHorizontal: 0,
     padding: 20,
   },
   wrapTextDesc: {
-    top: 30,
+    top: 0,
     width: '100%',
     marginHorizontal: 0,
-    padding: 10,
+    padding: 20,
   },
   wrapChooseSize: {
     top: 30,
@@ -182,12 +204,13 @@ const styles = StyleSheet.create({
     color: '#000',
     marginTop: 5,
   },
-  textDesc: {
+  label: {
     fontFamily: 'Poppins-Bold',
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'justify',
-    color: '#000',
+    color: '#9F9F9F',
+    marginBottom: 5,
   },
   textHeadChoose: {
     fontFamily: 'Poppins-Bold',
@@ -197,8 +220,8 @@ const styles = StyleSheet.create({
   },
   wrapImage: {
     borderRadius: 50,
-    marginLeft: 150,
-    marginTop: -120,
+    marginLeft: 130,
+    marginTop: 50,
     width: '50%',
     height: '23%',
   },
@@ -206,7 +229,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 70,
     marginVertical: '3%',
-    backgroundColor: '#fff',
+    backgroundColor: '#6A4029',
     borderRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
@@ -221,7 +244,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Bold',
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#000',
+    color: '#fff',
   },
   textSave: {
     fontFamily: 'Poppins-Bold',
@@ -240,10 +263,13 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   formInput: {
-    padding: 10,
-    width: 300,
-    top: 20,
-    marginHorizontal: 40,
+    padding: 0,
+    width: '100%',
+    height: 40,
+    top: 0,
+    marginHorizontal: 0,
+    borderColor: '#9F9F9F',
+    borderBottomWidth: 1,
   },
   textInput: {
     color: '#000',
@@ -279,9 +305,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   wrapButton: {
-    flex: 0.47,
+    width: 30,
+    height: 30,
     justifyContent: 'center',
-    top: 0,
+    alignItems: 'center',
+    top: 120,
+    marginLeft: 210,
+    backgroundColor: '#895537',
+    borderRadius: 25,
+    position: 'absolute',
   },
   wrapBankImage: {
     backgroundColor: '#895537',
@@ -301,10 +333,21 @@ const styles = StyleSheet.create({
   },
   wrapCodImage: {
     backgroundColor: '#FFBA33',
-    width: 40,
+    width: '100%',
     height: 40,
     borderRadius: 8,
     padding: 8,
     marginHorizontal: 5,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 20,
+  },
+  textRadio: {
+    marginTop: 5,
+    color: '#9F9F9F',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
