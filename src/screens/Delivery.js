@@ -20,6 +20,7 @@ const Delivery = props => {
   console.log('data profile: ', profile);
   const onPayment = () => {
     props.navigation.navigate('Payment', {
+      checked: checked,
       amount: amount,
       itemTotal: itemTotal,
       deliveryCharge: deliveryCharge,

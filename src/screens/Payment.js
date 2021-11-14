@@ -20,13 +20,11 @@ const Payment = props => {
   const [checked, setChecked] = React.useState('');
   const { amount, totalPrice } = props.route.params;
   const { items } = props.cart;
+  const { token } = props.auth;
   const dispatch = useDispatch();
   const onPay = () => {
-    dispatch(createTransaction(items, checked, props.auth.token));
+    dispatch(createTransaction(items, checked, token, props.navigation));
   };
-  console.log(props.auth.token);
-  console.log(items);
-  console.log(checked);
   return (
     <ScrollView>
       <View style={styles.row}>
