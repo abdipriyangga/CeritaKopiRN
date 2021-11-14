@@ -4,11 +4,12 @@ const initStateProfile = {
   name: '',
   isUpload: false,
   profile: {},
+  data: {},
 };
 
 const profile = (state = initStateProfile, action) => {
   switch (action.type) {
-    case 'SET_PHOTO':
+    case 'SET_IMAGE':
       return {
         ...state,
         uri: action.payload.uri,
@@ -24,6 +25,11 @@ const profile = (state = initStateProfile, action) => {
       return {
         ...state,
         profile: action.payload,
+      };
+    case 'SET_UPDATE_USER_PROFILE':
+      return {
+        ...state,
+        data: action.payload,
       };
     default:
       return {

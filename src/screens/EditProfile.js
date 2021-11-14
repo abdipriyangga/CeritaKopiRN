@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,15 +7,107 @@ import {
   ScrollView,
   Image,
   TextInput,
+  Modal,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { defaultUser } from '../assets';
 import { RadioButton } from 'react-native-paper';
 import DateField from 'react-native-datefield';
+import { connect, useDispatch } from 'react-redux';
+import { getProfile, updateProfile } from '../redux/actions/profile';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import { ToastAndroid } from 'react-native';
 const EditProfile = props => {
+  const { profile } = props.profile;
+  const { token } = props.auth;
+  // console.log('this isi proile  data: ', profile);
+  const dispatch = useDispatch();
   const [checked, setChecked] = React.useState('');
+  const [name, setName] = useState(profile.name);
+  const [email, setEmail] = useState(profile.email);
+  const [phone, setPhone] = useState(profile.phone_number);
+  const [address, setAddress] = useState(profile.address);
+  const [images, setImage] = useState(
+    profile.images === null ? defaultUser : { uri: profile.images },
+  );
+  const [modalVisible, setModalVisible] = useState(false);
+  const addImage = type => {
+    setModalVisible(!modalVisible);
+    if (type === 'galery') {
+      launchImageLibrary(
+        { quality: 0.5, maxHeight: 130, maxWidth: 130 },
+        response => {
+          if (response.didCancel) {
+            ToastAndroid.show('You dont choose any image!', ToastAndroid.SHORT);
+          } else {
+            setImage({ uri: response.assets[0].uri });
+            const dataImage = {
+              uri: response.assets[0].uri,
+              type: response.assets[0].type,
+              name: response.assets[0].fileName,
+            };
+            dispatch({ type: 'SET_IMAGE', payload: dataImage });
+            dispatch({ type: 'SET_UPLOAD_STATUS', payload: true });
+          }
+        },
+      );
+    } else {
+      launchCamera(
+        { quality: 0.5, maxHeight: 130, maxWidth: 130 },
+        response => {
+          if (response.didCancel) {
+            ToastAndroid.show('You dont choose any image!', ToastAndroid.SHORT);
+          } else {
+            setImage({ uri: response.assets[0].uri });
+            const dataImage = {
+              uri: response.assets[0].uri,
+              type: response.assets[0].type,
+              name: response.assets[0].fileName,
+            };
+            dispatch({ type: 'SET_IMAGE', payload: dataImage });
+            dispatch({ type: 'SET_UPLOAD_STATUS', payload: true });
+          }
+        },
+      );
+    }
+  };
+  const formData = {
+    name: name,
+    email: email,
+    phone: phone,
+    address: address,
+  };
+  // console.log('IMAGE: ', images);
+  const onSubmit = () => {
+    dispatch(updateProfile(formData, token, props.profile, props.navigation));
+  };
   return (
     <ScrollView vertical={true}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.modalContainer}>
+          <View style={styles.wrapperModal}>
+            <TouchableOpacity onPress={() => addImage('galery')}>
+              <Text>Choose photo from galery</Text>
+            </TouchableOpacity>
+            <View style={{ height: 20 }} />
+            <TouchableOpacity onPress={() => addImage('take')}>
+              <Text>Take a photo</Text>
+            </TouchableOpacity>
+            <View style={{ height: 20 }} />
+            <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+              <Text>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.row}>
         <TouchableOpacity onPress={() => props.navigation.goBack()}>
           <Icon name="chevron-back-outline" size={30} color="black" />
@@ -26,10 +118,10 @@ const EditProfile = props => {
       </View>
       <View>
         <View style={styles.wrapImage}>
-          <Image source={defaultUser} style={styles.image} />
+          <Image source={images} style={styles.image} />
         </View>
         <View style={styles.wrapButton}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
             <Icon name="pencil-outline" size={20} color={'#fff'} />
           </TouchableOpacity>
         </View>
@@ -38,7 +130,11 @@ const EditProfile = props => {
         <View style={styles.wrapTextDesc}>
           <Text style={styles.label}>Name:</Text>
           <View>
-            <TextInput value="Abdi Priyangga" style={styles.formInput} />
+            <TextInput
+              value={name}
+              onChangeText={e => setName(e)}
+              style={styles.formInput}
+            />
           </View>
         </View>
         <View>
@@ -66,13 +162,21 @@ const EditProfile = props => {
         <View style={styles.wrapTextDesc}>
           <Text style={styles.label}>Email Address:</Text>
           <View>
-            <TextInput value="dummy7@gmail.com" style={styles.formInput} />
+            <TextInput
+              value={email}
+              onChangeText={e => setEmail(e)}
+              style={styles.formInput}
+            />
           </View>
         </View>
         <View style={styles.wrapTextDesc}>
           <Text style={styles.label}>Phone Number:</Text>
           <View>
-            <TextInput value="dummy7@gmail.com" style={styles.formInput} />
+            <TextInput
+              value={phone}
+              onChangeText={e => setPhone(e)}
+              style={styles.formInput}
+            />
           </View>
         </View>
         <View style={styles.wrapTextDesc}>
@@ -87,18 +191,29 @@ const EditProfile = props => {
         <View style={styles.wrapTextDeliv}>
           <Text style={styles.label}>Delivery Address:</Text>
           <View>
-            <TextInput value="Jln. Kenangan no: 100" style={styles.formInput} />
+            <TextInput
+              value={address}
+              onChangeText={e => setAddress(e)}
+              style={styles.formInput}
+            />
           </View>
         </View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={onSubmit}>
           <Text style={styles.textProcess}>Save and Update</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
   );
 };
-
-export default EditProfile;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  profile: state.profile,
+});
+const mapDispatchToProps = {
+  getProfile,
+  updateProfile,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(EditProfile);
 const styles = StyleSheet.create({
   container: {
     padding: 25,
@@ -349,5 +464,17 @@ const styles = StyleSheet.create({
     color: '#9F9F9F',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  modalContainer: {
+    justifyContent: 'flex-end',
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#000000a0',
+  },
+  wrapperModal: {
+    backgroundColor: '#fff',
+    height: 130,
+    justifyContent: 'center',
+    paddingLeft: 30,
   },
 });
