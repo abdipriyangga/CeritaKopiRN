@@ -17,6 +17,7 @@ import Cart from './screens/Cart';
 import Delivery from './screens/Delivery';
 import Payment from './screens/Payment';
 import EditProfile from './screens/EditProfile';
+import History from './screens/History';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -111,6 +112,11 @@ const Router = () => {
         <Stack.Screen
           name="EditProfile"
           component={EditProfile}
+          options={{ headerShown: false, tabBarBadge: 3 }}
+        />
+        <Stack.Screen
+          name="History"
+          component={History}
           options={{ headerShown: false, tabBarBadge: 3 }}
         />
       </Stack.Navigator>

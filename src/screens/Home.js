@@ -35,7 +35,7 @@ const Home = props => {
         <TouchableOpacity onPress={() => props.navigation.openDrawer()}>
           <Icon name="menu-outline" size={30} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => props.navigation.openDrawer()}>
+        <TouchableOpacity onPress={() => props.navigation.navigate('Cart')}>
           <Icon name="cart-outline" size={30} />
         </TouchableOpacity>
       </View>
@@ -127,13 +127,13 @@ const styles = StyleSheet.create({
   },
   textHead: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 40,
+    fontSize: 38,
     fontWeight: 'bold',
     textAlign: 'justify',
   },
   textHeadSec: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 40,
+    fontSize: 38,
     fontWeight: 'bold',
     textAlign: 'justify',
     left: 10,
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 300,
     top: 20,
-    marginHorizontal: 40,
+    marginHorizontal: '4%',
   },
   textInput: {
     color: '#000',

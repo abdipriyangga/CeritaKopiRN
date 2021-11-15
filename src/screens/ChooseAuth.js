@@ -59,14 +59,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    marginLeft: '8%',
+    marginHorizontal: '3%',
     width: 340,
     height: 70,
     backgroundColor: '#6A4029',
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 7,
+    marginVertical: '7%',
   },
   textBtn: {
     fontFamily: 'Poppins-Bold',
@@ -74,8 +74,8 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   buttonLogin: {
-    marginLeft: '8%',
-    marginVertical: 10,
+    marginHorizontal: '3%',
+    marginVertical: '2%',
     width: 340,
     height: 70,
     backgroundColor: '#FFBA33',

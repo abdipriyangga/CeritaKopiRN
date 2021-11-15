@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
     marginLeft: -40,
   },
   button: {
-    marginHorizontal: '8%',
-    marginVertical: '3%',
+    marginHorizontal: '3%',
+    marginVertical: '8%',
     width: 340,
     height: 70,
     backgroundColor: '#6A4029',

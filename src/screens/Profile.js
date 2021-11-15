@@ -49,7 +49,9 @@ const Profile = props => {
         />
       </View>
       <View style={styles.wrapButton}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => props.navigation.navigate('History')}>
           <Text style={styles.textProcess}>Order History</Text>
         </TouchableOpacity>
       </View>

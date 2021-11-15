@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   },
   button: {
     top: 20,
-    marginHorizontal: 30,
+    marginHorizontal: '3%',
     width: 340,
     height: 80,
     backgroundColor: '#6A4029',
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 352,
     top: 10,
-    marginHorizontal: 15,
+    marginHorizontal: '1%',
   },
   textInput: {
     color: '#000',
