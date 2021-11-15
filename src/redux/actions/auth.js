@@ -2,7 +2,6 @@ import http from '../../helpers/http';
 import FlashMessage from '../../components/FlashMessage';
 import { ToastAndroid } from 'react-native';
 import { API_URL } from '@env';
-// const URL = 'http://localhost:8090';
 
 export const Register = (data, navigation) => {
   return async dispatch => {

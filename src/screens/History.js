@@ -1,16 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Image,
+  FlatList,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CardHistory from '../components/CardHistory';
+import { connect } from 'react-redux';
+import { getHistory } from '../redux/actions/history';
+import { CoffeeImage } from '../assets';
+import { API_URL } from '@env';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+
+const Separator = () => <View style={styles.itemSeparator} />;
 
 const History = props => {
+  const { history } = props.history;
+  console.log('HISTORY DATA: ', history);
+  useEffect(() => {
+    props.getHistory(props.auth.token);
+    console.log('tooken from useEffect: ', props.auth.token);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <ScrollView>
       <View style={styles.row}>
@@ -25,14 +39,69 @@ const History = props => {
         <Text style={styles.textHeadSec}>Order History</Text>
       </View>
       <View>
-        <CardHistory />
+        {history !== null ? (
+          <FlatList
+            data={history}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => (
+              <CardHistory
+                key={item.id}
+                img={
+                  item.images === null || undefined
+                    ? CoffeeImage
+                    : { uri: `${API_URL}${item.images}` }
+                }
+                name={item.item_name}
+                price={item.total}
+                deliv={item.payment_method}
+              />
+            )}
+          />
+        ) : (
+          <View>
+            <Text>You dont have any history order.</Text>
+          </View>
+        )}
+        {/* {history !== null ? (
+          history?.map(histo => {
+            return (
+              <CardHistory
+                img={
+                  histo?.images === null || undefined
+                    ? CoffeeImage
+                    : { uri: `${API_URL}${histo?.images}` }
+                }
+                name={histo?.item_name}
+                price={histo?.total}
+                deliv={histo?.payment_method}
+              />
+            );
+          })
+        ) : (
+          <View>
+            <Text>You dont have any history order.</Text>
+          </View>
+        )} */}
       </View>
     </ScrollView>
   );
 };
-
-export default History;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  users: state.users,
+  transaction: state.transaction,
+  history: state.history,
+});
+const mapDispatchToProps = {
+  getHistory,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(History);
 const styles = StyleSheet.create({
+  itemSeparator: {
+    flex: 1,
+    height: 0.5,
+    backgroundColor: '#444',
+  },
   container: {
     padding: 25,
     top: -120,

@@ -1,8 +1,7 @@
 import http from '../../helpers/http';
 import FlashMessage from '../../components/FlashMessage';
 import { ToastAndroid } from 'react-native';
-
-const API_URL = 'http://localhost:8090';
+import { API_URL } from '@env';
 
 export const getHistory = token => {
   return async dispatch => {
@@ -15,7 +14,6 @@ export const getHistory = token => {
       });
       console.log('newedata: ', newData);
       dispatch({ type: 'SET_HISTORY', payload: newData.results });
-      // FlashMessage('Register Success!', 'success');
     } catch (err) {
       dispatch({ type: 'SET_LOADING', payload: false });
     }
@@ -42,7 +40,7 @@ export const deleteHistory = (token, id) => {
   return async dispatch => {
     try {
       const { data } = await http(token).delete(
-        `${API_URL}/private/transactions/${id}`,
+        `${API_URL}/transactions/${id}`,
       );
       dispatch(getHistory(token));
       ToastAndroid('Delete successfully', 'success');

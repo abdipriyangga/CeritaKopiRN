@@ -1,27 +1,57 @@
 import React from 'react';
 import { TouchableOpacity, Text, View, StyleSheet, Image } from 'react-native';
 import { CoffeeImage } from '../assets';
-const CardHistory = ({ onPress, name, img, price }) => {
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+import Icon from 'react-native-vector-icons/Ionicons';
+const rightSwipeActions = () => {
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={onPress}>
-        <View style={styles.card}>
-          <View style={styles.row}>
-            <View>
-              <Image
-                source={img ? img : CoffeeImage}
-                style={styles.wrapImage}
-              />
-            </View>
-            <View>
-              <Text style={styles.textHead}>Veggie tomato mix{name} </Text>
-              <Text style={styles.textSecPrice}>IDR 23400 {price} </Text>
-              <Text style={styles.textSec}>Picked up at store {price} </Text>
+    <View
+      style={{
+        backgroundColor: '#6A4029',
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+        padding: 0,
+        borderRadius: 25,
+        height: 50,
+        width: 50,
+        marginTop: 50,
+        marginHorizontal: 30,
+      }}>
+      <Icon
+        name="trash-outline"
+        size={30}
+        style={{ left: -10 }}
+        color={'#fff'}
+      />
+    </View>
+  );
+};
+
+const CardHistory = ({ onPress, name, img, price, deliv, action }) => {
+  return (
+    <Swipeable
+      renderRightActions={rightSwipeActions}
+      onSwipeableRightOpen={action}>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={onPress}>
+          <View style={styles.card}>
+            <View style={styles.row}>
+              <View>
+                <Image
+                  source={img ? img : CoffeeImage}
+                  style={styles.wrapImage}
+                />
+              </View>
+              <View>
+                <Text style={styles.textHead}>{name} </Text>
+                <Text style={styles.textSecPrice}>{price} </Text>
+                <Text style={styles.textSec}> {deliv} </Text>
+              </View>
             </View>
           </View>
-        </View>
-      </TouchableOpacity>
-    </View>
+        </TouchableOpacity>
+      </View>
+    </Swipeable>
   );
 };
 
