@@ -17,7 +17,14 @@ export const getProfile = token => {
   };
 };
 
-export const updateProfile = (data, token, images, navigation) => {
+export const updateProfile = (
+  data,
+  token,
+  gender,
+  images,
+  tanggal,
+  navigation,
+) => {
   return async dispatch => {
     const form = new FormData();
     const limitSize = 2 * 1040 * 1040;
@@ -31,6 +38,8 @@ export const updateProfile = (data, token, images, navigation) => {
       form.append('email', data.email);
       form.append('phone_number', data.phone);
       form.append('address', data.address);
+      form.append('gender', gender);
+      form.append('tanggal_lahir', tanggal);
       form.append('images', images);
       const { data: updateData } = await http(token).put(
         `${API_URL}/profile`,

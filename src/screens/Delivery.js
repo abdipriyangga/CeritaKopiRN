@@ -43,7 +43,8 @@ const Delivery = props => {
       </View>
       <View style={styles.rowVariant}>
         <Text style={styles.textDesc}>Address Detail</Text>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => props.navigation.navigate('EditProfile')}>
           <Text style={styles.textBtn}>change</Text>
         </TouchableOpacity>
       </View>

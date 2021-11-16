@@ -23,11 +23,12 @@ const EditProfile = props => {
   const { token } = props.auth;
   // console.log('this isi proile  data: ', profile);
   const dispatch = useDispatch();
-  const [checked, setChecked] = React.useState('');
+  const [gender, setGender] = React.useState('');
   const [name, setName] = useState(profile.name);
   const [email, setEmail] = useState(profile.email);
   const [phone, setPhone] = useState(profile.phone_number);
   const [address, setAddress] = useState(profile.address);
+  const [tanggal, setTanggal] = useState(profile.tanggal_lahir);
   const [images, setImage] = useState(
     profile.images === null ? defaultUser : { uri: profile.images },
   );
@@ -59,11 +60,11 @@ const EditProfile = props => {
           if (response.didCancel) {
             ToastAndroid.show('You dont choose any image!', ToastAndroid.SHORT);
           } else {
-            setImage({ uri: response.assets[0].uri });
+            setImage({ uri: response.assets.uri });
             const dataImage = {
-              uri: response.assets[0].uri,
-              type: response.assets[0].type,
-              name: response.assets[0].fileName,
+              uri: response.assets.uri,
+              type: response.assets.type,
+              name: response.assets.fileName,
             };
             dispatch({ type: 'SET_IMAGE', payload: dataImage });
             dispatch({ type: 'SET_UPLOAD_STATUS', payload: true });
@@ -77,10 +78,13 @@ const EditProfile = props => {
     email: email,
     phone: phone,
     address: address,
+    gender: gender,
   };
   // console.log('IMAGE: ', images);
   const onSubmit = () => {
-    dispatch(updateProfile(formData, token, props.profile, props.navigation));
+    dispatch(
+      updateProfile(formData, token, gender, props.profile, props.navigation),
+    );
   };
   return (
     <ScrollView vertical={true}>
@@ -141,18 +145,18 @@ const EditProfile = props => {
           <View style={styles.rowVariant}>
             <View style={{ flexDirection: 'row' }}>
               <RadioButton
-                value="Card"
-                status={checked === 'Card' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('Card')}
+                value="Female"
+                status={gender === 'Female' ? 'checked' : 'unchecked'}
+                onPress={() => setGender('Female')}
                 color="#6A4029"
               />
               <Text style={styles.textRadio}>Female</Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
               <RadioButton
-                value="Card"
-                status={checked === 'Card' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('Card')}
+                value="Male"
+                status={gender === 'Male' ? 'checked' : 'unchecked'}
+                onPress={() => setGender('Male')}
                 color="#6A4029"
               />
               <Text style={styles.textRadio}>Male</Text>
@@ -184,7 +188,8 @@ const EditProfile = props => {
           <View>
             <DateField
               styleInput={styles.inputBorder}
-              onSubmit={() => console.log()}
+              defaultValue={tanggal}
+              onSubmit={e => setTanggal(e)}
             />
           </View>
         </View>

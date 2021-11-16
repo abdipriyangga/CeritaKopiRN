@@ -41,7 +41,13 @@ const History = props => {
       <View style={styles.wrapTextDeliv}>
         <Text style={styles.textHeadSec}>Order History</Text>
       </View>
-      {history > 1 || undefined ? (
+      {history < 1 || undefined ? (
+        <View style={styles.wrapTextDeliv}>
+          <Text style={styles.textSubHead}>
+            You dont have any history order.
+          </Text>
+        </View>
+      ) : (
         <>
           <Text style={styles.textProcess}>Swipe left to delete</Text>
           <FlatList
@@ -65,12 +71,6 @@ const History = props => {
             }}
           />
         </>
-      ) : (
-        <View style={styles.wrapTextDeliv}>
-          <Text style={styles.textSubHead}>
-            You dont have any history order.
-          </Text>
-        </View>
       )}
       {/* {history !== null ? (
           history?.map(histo => {
