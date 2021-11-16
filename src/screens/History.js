@@ -6,16 +6,14 @@ import {
   TouchableOpacity,
   ScrollView,
   FlatList,
+  LogBox,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CardHistory from '../components/CardHistory';
 import { connect } from 'react-redux';
-import { getHistory } from '../redux/actions/history';
+import { getHistory, deleteHistory } from '../redux/actions/history';
 import { CoffeeImage } from '../assets';
 import { API_URL } from '@env';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
-
-const Separator = () => <View style={styles.itemSeparator} />;
 
 const History = props => {
   const { history } = props.history;
@@ -25,6 +23,11 @@ const History = props => {
     console.log('tooken from useEffect: ', props.auth.token);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const onDeleteHistory = () => {
+    props.deleteHistory(props.auth.token, history.id);
+    props.navigation.reset({ index: 0, routes: [{ name: 'History' }] });
+  };
+  LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   return (
     <ScrollView>
       <View style={styles.row}>
@@ -38,31 +41,38 @@ const History = props => {
       <View style={styles.wrapTextDeliv}>
         <Text style={styles.textHeadSec}>Order History</Text>
       </View>
-      <View>
-        {history !== null ? (
+      {history > 1 || undefined ? (
+        <>
+          <Text style={styles.textProcess}>Swipe left to delete</Text>
           <FlatList
             data={history}
             keyExtractor={item => item.id}
-            renderItem={({ item }) => (
-              <CardHistory
-                key={item.id}
-                img={
-                  item.images === null || undefined
-                    ? CoffeeImage
-                    : { uri: `${API_URL}${item.images}` }
-                }
-                name={item.item_name}
-                price={item.total}
-                deliv={item.payment_method}
-              />
-            )}
+            renderItem={({ item }) => {
+              return (
+                <CardHistory
+                  key={item.id}
+                  img={
+                    item.images === null || undefined
+                      ? CoffeeImage
+                      : { uri: `${API_URL}${item.images}` }
+                  }
+                  name={item.item_name}
+                  price={item.total}
+                  deliv={item.payment_method}
+                  action={() => props.deleteHistory(props.auth.token, item.id)}
+                />
+              );
+            }}
           />
-        ) : (
-          <View>
-            <Text>You dont have any history order.</Text>
-          </View>
-        )}
-        {/* {history !== null ? (
+        </>
+      ) : (
+        <View style={styles.wrapTextDeliv}>
+          <Text style={styles.textSubHead}>
+            You dont have any history order.
+          </Text>
+        </View>
+      )}
+      {/* {history !== null ? (
           history?.map(histo => {
             return (
               <CardHistory
@@ -82,7 +92,6 @@ const History = props => {
             <Text>You dont have any history order.</Text>
           </View>
         )} */}
-      </View>
     </ScrollView>
   );
 };
@@ -94,6 +103,7 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = {
   getHistory,
+  deleteHistory,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(History);
 const styles = StyleSheet.create({
@@ -200,11 +210,11 @@ const styles = StyleSheet.create({
   },
   textSubHead: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '800',
-    textAlign: 'left',
-    color: '#000',
-    marginTop: 5,
+    textAlign: 'center',
+    color: '#9F9F9F',
+    marginTop: 100,
   },
   label: {
     fontFamily: 'Poppins-Bold',
@@ -244,9 +254,10 @@ const styles = StyleSheet.create({
   },
   textProcess: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: 'bold',
-    color: '#fff',
+    color: '#9F9F9F',
+    textAlign: 'center',
   },
   textSave: {
     fontFamily: 'Poppins-Bold',

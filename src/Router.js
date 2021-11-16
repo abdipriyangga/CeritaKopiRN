@@ -18,6 +18,7 @@ import Delivery from './screens/Delivery';
 import Payment from './screens/Payment';
 import EditProfile from './screens/EditProfile';
 import History from './screens/History';
+import SplashScreen from './screens/SplashScreen';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -53,12 +54,17 @@ const myDrawer = () => {
 };
 const Router = () => {
   const token = useSelector(state => state.auth.token);
-  // console.log('ini token loh: ', token);
+  // console.log('INI TOKEN LOHH YA: ', token);
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Welcome">
+      <Stack.Navigator initialRouteName="Splash">
         {token === null ? (
           <>
+            <Stack.Screen
+              name="Splash"
+              component={SplashScreen}
+              options={{ headerShown: false, tabBarBadge: 3 }}
+            />
             <Stack.Screen
               name="Welcome"
               component={Welcome}

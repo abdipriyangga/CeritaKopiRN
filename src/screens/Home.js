@@ -11,16 +11,17 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import CardItem from '../components/CardItem';
 import Input from '../components/Input';
-import { connect } from 'react-redux';
-import { getProducts } from '../redux/actions/items';
+import { connect, useDispatch } from 'react-redux';
+import { getProducts, searchProducts } from '../redux/actions/items';
 import { getCategory, getProductCategory } from '../redux/actions/category';
 import { CoffeeImage } from '../assets';
-const URL = 'http://localhost:8090';
-
+import { API_URL } from '@env';
+import { SearchBar } from 'react-native-elements';
 const Home = props => {
   const { data } = props.items;
   const { data: dataCategory } = props.category;
   const { productCategory } = props.category;
+  const { search, setSearch } = useState('');
   useEffect(() => {
     // console.log("ini getProducts action: ", getProducts());
     props.getProducts();
@@ -29,6 +30,12 @@ const Home = props => {
     console.log('data categroy: ', dataCategory);
     // getItemByCategory(id);
   }, []);
+  const dispatch = useDispatch();
+  const onSearch = () => {
+    dispatch(searchProducts(search));
+  };
+
+
   return (
     <View style={styles.container}>
       <View style={styles.row}>
@@ -45,8 +52,17 @@ const Home = props => {
           <Text style={styles.textHeadSec}>a good day</Text>
         </View>
         <View style={styles.formInput}>
-          <Input placeholder="Search" />
+          {/* <Input placeholder="Search" /> */}
+          {/* <SearchBar
+            containerStyle={{ flex: 1, borderRadius: 25 }}
+            lightTheme
+            placeholder="Type Here..."
+            platform="android"
+            clearButtonMode="always"
+            value={search}
+          /> */}
         </View>
+
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.wrapCategory}>
             {dataCategory.map(dc => {
@@ -69,7 +85,7 @@ const Home = props => {
                   img={
                     items.images === null || undefined
                       ? CoffeeImage
-                      : { uri: `${URL}${items.images}` }
+                      : { uri: `${API_URL}${items.images}` }
                   }
                   onPress={() => props.navigation.navigate('ProductDetail', { id: items.id })}
                 />
@@ -87,7 +103,7 @@ const Home = props => {
                   <CardItem key={prod.id} name={prod.name} price={prod.price} img={
                     prod.images === null || undefined
                       ? CoffeeImage
-                      : { uri: `${URL}${prod.images}` }
+                      : { uri: `${API_URL}${prod.images}` }
                   } onPress={() => props.navigation.navigate('ProductDetail', { id: prod.id })} />
                 );
               }
@@ -108,6 +124,7 @@ const mapDispatchToProps = {
   getProducts,
   getCategory,
   getProductCategory,
+  searchProducts,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
 const styles = StyleSheet.create({

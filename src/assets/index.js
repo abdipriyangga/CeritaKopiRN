@@ -9,6 +9,7 @@ import Card from './images/card.png';
 import Bank from './images/bank.png';
 import Cod from './images/cod.png';
 import MyCard from './images/myCard.png';
+import IconCoffee from './coffee.png';
 export {
   welcomeImage,
   loginImage,
@@ -21,4 +22,5 @@ export {
   Bank,
   Cod,
   MyCard,
+  IconCoffee,
 };

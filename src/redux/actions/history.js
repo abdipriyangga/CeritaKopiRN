@@ -31,7 +31,7 @@ export const getDetailHistory = (token, id) => {
       });
       dispatch({ type: 'SET_LOADING', payload: false });
     } catch (error) {
-      console.log(error?.response?.data?.message);
+      console.log(error);
     }
   };
 };
@@ -43,13 +43,13 @@ export const deleteHistory = (token, id) => {
         `${API_URL}/transactions/${id}`,
       );
       dispatch(getHistory(token));
-      ToastAndroid('Delete successfully', 'success');
+      ToastAndroid.show('Delete Success!', ToastAndroid.SHORT);
       dispatch({
         type: 'SET_HISTORY',
         payload: data.results,
       });
     } catch (err) {
-      ToastAndroid(err?.response?.data?.message);
+      ToastAndroid.show('Delete Failed!', ToastAndroid.SHORT);
     }
   };
 };
