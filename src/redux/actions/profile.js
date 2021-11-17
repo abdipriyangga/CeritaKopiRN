@@ -3,7 +3,7 @@ import { ToastAndroid } from 'react-native';
 import { API_URL } from '@env';
 
 export const getProfile = token => {
-  console.log('url', API_URL);
+  console.log('URL Profile: ', API_URL);
   return async dispatch => {
     dispatch({ type: 'SET_GET_PROFILE', payload: true });
     try {
