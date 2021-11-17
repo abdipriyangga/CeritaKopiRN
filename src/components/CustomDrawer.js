@@ -22,7 +22,7 @@ const CustomDrawer = (props) => {
         <Image
           style={styles.pictureDrawer}
           source={
-            profile.images === null
+            profile.images === null || undefined
               ? defaultUser
               : { uri: profile.images }
             // defaultUser

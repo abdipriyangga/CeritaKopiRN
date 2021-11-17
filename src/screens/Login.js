@@ -16,8 +16,8 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const form = {
-    email,
-    password,
+    email: email,
+    password: password,
   };
   const onSubmit = () => {
     dispatch(loginAction(form));
@@ -34,14 +34,14 @@ const Login = () => {
         <View style={styles.formInput}>
           <Input
             value={email}
-            onChangeText={setEmail}
+            onChangeText={value => setEmail(value)}
             keyboardType="email-address"
             placeholder="enter your email address"
             variant="underlined"
           />
           <Input
             value={password}
-            onChangeText={setPassword}
+            onChangeText={value => setPassword(value)}
             placeholder="enter your password"
             variant="underlined"
             color="#000"

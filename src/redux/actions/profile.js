@@ -17,14 +17,7 @@ export const getProfile = token => {
   };
 };
 
-export const updateProfile = (
-  data,
-  token,
-  gender,
-  images,
-  tanggal,
-  navigation,
-) => {
+export const updateProfile = (data, token, images, navigation) => {
   return async dispatch => {
     const form = new FormData();
     const limitSize = 2 * 1040 * 1040;
@@ -38,8 +31,7 @@ export const updateProfile = (
       form.append('email', data.email);
       form.append('phone_number', data.phone);
       form.append('address', data.address);
-      form.append('gender', gender);
-      form.append('tanggal_lahir', tanggal);
+      form.append('gender', data.gender);
       form.append('images', images);
       const { data: updateData } = await http(token).put(
         `${API_URL}/profile`,
@@ -52,7 +44,7 @@ export const updateProfile = (
       dispatch(getProfile(token));
       navigation.reset({ index: 0, routes: [{ name: 'myDrawer' }] });
     } catch (error) {
-      return ToastAndroid.show('Ups Update Failed!', ToastAndroid.SHORT);
+      return ToastAndroid.show(error, ToastAndroid.SHORT);
     }
   };
 };

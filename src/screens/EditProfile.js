@@ -23,7 +23,7 @@ const EditProfile = props => {
   const { token } = props.auth;
   // console.log('this isi proile  data: ', profile);
   const dispatch = useDispatch();
-  const [gender, setGender] = React.useState('');
+  const [checked, setChecked] = React.useState(profile.gender || 'Male');
   const [name, setName] = useState(profile.name);
   const [email, setEmail] = useState(profile.email);
   const [phone, setPhone] = useState(profile.phone_number);
@@ -78,13 +78,11 @@ const EditProfile = props => {
     email: email,
     phone: phone,
     address: address,
-    gender: gender,
+    gender: checked,
   };
   // console.log('IMAGE: ', images);
   const onSubmit = () => {
-    dispatch(
-      updateProfile(formData, token, gender, props.profile, props.navigation),
-    );
+    dispatch(updateProfile(formData, token, props.profile, props.navigation));
   };
   return (
     <ScrollView vertical={true}>
@@ -146,8 +144,8 @@ const EditProfile = props => {
             <View style={{ flexDirection: 'row' }}>
               <RadioButton
                 value="Female"
-                status={gender === 'Female' ? 'checked' : 'unchecked'}
-                onPress={() => setGender('Female')}
+                status={checked === 'Female' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Female')}
                 color="#6A4029"
               />
               <Text style={styles.textRadio}>Female</Text>
@@ -155,8 +153,8 @@ const EditProfile = props => {
             <View style={{ flexDirection: 'row' }}>
               <RadioButton
                 value="Male"
-                status={gender === 'Male' ? 'checked' : 'unchecked'}
-                onPress={() => setGender('Male')}
+                status={checked === 'Male' ? 'checked' : 'unchecked'}
+                onPress={() => setChecked('Male')}
                 color="#6A4029"
               />
               <Text style={styles.textRadio}>Male</Text>
@@ -186,11 +184,7 @@ const EditProfile = props => {
         <View style={styles.wrapTextDesc}>
           <Text style={styles.label}>Date of Birth:</Text>
           <View>
-            <DateField
-              styleInput={styles.inputBorder}
-              defaultValue={tanggal}
-              onSubmit={e => setTanggal(e)}
-            />
+            <DateField styleInput={styles.inputBorder} />
           </View>
         </View>
         <View style={styles.wrapTextDeliv}>

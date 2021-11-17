@@ -19,9 +19,9 @@ const Register = ({ navigation }) => {
   const [phone_number, setPhoneNumber] = useState('');
   const dispatch = useDispatch();
   const form = {
-    email,
-    password,
-    phone_number,
+    email: email,
+    password: password,
+    phone_number: phone_number,
   };
   const onSubmit = () => {
     dispatch(registerAction(form, navigation));
@@ -38,14 +38,14 @@ const Register = ({ navigation }) => {
         <View style={styles.formInput}>
           <Input
             value={email}
-            onChangeText={setEmail}
+            onChangeText={value => setEmail(value)}
             keyboardType="email-address"
             placeholder="enter your email address"
             variant="underlined"
           />
           <Input
             value={password}
-            onChangeText={setPassword}
+            onChangeText={value => setPassword(value)}
             placeholder="enter your password"
             variant="underlined"
             color="#000"
@@ -53,7 +53,7 @@ const Register = ({ navigation }) => {
           />
           <Input
             value={phone_number}
-            onChangeText={setPhoneNumber}
+            onChangeText={value => setPhoneNumber(value)}
             keyboardType="number-pad"
             placeholder="enter your phone number"
             variant="underlined"
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   },
   button: {
     top: 20,
-    marginHorizontal: 30,
+    marginHorizontal: 10,
     width: 340,
     height: 80,
     backgroundColor: '#6A4029',
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 352,
     top: 10,
-    marginHorizontal: 15,
+    marginHorizontal: 5,
   },
   textInput: {
     color: '#000',
